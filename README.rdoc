@@ -5,8 +5,8 @@
 $ rails awdemo-bizapp
 
 === create mysql databases
-mysqladmin -uroot -p create bizapp_development
-mysqladmin -uroot -p create bizapp_test
+mysqladmin -uroot -p create cupcake_development
+mysqladmin -uroot -p create cupcake_test
 
 
 === create basic structures

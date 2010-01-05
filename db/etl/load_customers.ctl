@@ -31,7 +31,7 @@ before_write :check_exist, {
 destination :out, {
   :type => :database,
   :target => :development,
-  :database => 'bizapp_development',
+  :database => 'cupcake_development',
   :table => 'customers'
 },
 {

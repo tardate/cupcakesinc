@@ -31,7 +31,7 @@ before_write :copy_field, :destination => :id, :source => :order_id
 destination :order, {
   :type => :database,
   :target => :development,
-  :database => 'bizapp_development',
+  :database => 'cupcake_development',
   :table => 'orders',
   :unique => [:id]
 },
@@ -42,7 +42,7 @@ destination :order, {
 destination :order_lines, {
   :type => :database,
   :target => :development,
-  :database => 'bizapp_development',
+  :database => 'cupcake_development',
   :table => 'order_items'
 },
 {
