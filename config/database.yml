@@ -1,4 +1,12 @@
 
+etl_execution:
+  adapter: mysql
+  username: root
+  password: password
+  host: localhost
+  database: etl_execution
+  encoding: utf8
+  
 development:
   adapter: mysql
   database: bizapp_development

@@ -1,0 +1,16 @@
+<% title "Customer" %>
+
+<p>
+  <strong>Name:</strong>
+  <%=h @customer.name %>
+</p>
+<p>
+  <strong>Description:</strong>
+  <%=h @customer.description %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_customer_path(@customer) %> |
+  <%= link_to "Destroy", @customer, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", customers_path %>
+</p>

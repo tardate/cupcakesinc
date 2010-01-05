@@ -1,0 +1,19 @@
+<% title "Recipes" %>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Production Cost</th>
+  </tr>
+  <% for recipe in @recipes %>
+    <tr>
+      <td><%=h recipe.name %></td>
+      <td><%=h recipe.production_cost %></td>
+      <td><%= link_to "Show", recipe %></td>
+      <td><%= link_to "Edit", edit_recipe_path(recipe) %></td>
+      <td><%= link_to "Destroy", recipe, :confirm => 'Are you sure?', :method => :delete %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p><%= link_to "New Recipe", new_recipe_path %></p>

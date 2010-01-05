@@ -1,0 +1,12 @@
+<% form_for @recipe do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :production_cost %><br />
+    <%= f.text_field :production_cost %>
+  </p>
+  <p><%= f.submit "Submit" %></p>
+<% end %>

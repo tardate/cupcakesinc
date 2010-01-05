@@ -1,0 +1,20 @@
+<% form_for @order_item do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :order_id %><br />
+    <%= f.text_field :order_id %>
+  </p>
+  <p>
+    <%= f.label :product_id %><br />
+    <%= f.text_field :product_id %>
+  </p>
+  <p>
+    <%= f.label :qty %><br />
+    <%= f.text_field :qty %>
+  </p>
+  <p>
+    <%= f.label :unit_price %><br />
+    <%= f.text_field :unit_price %>
+  </p>
+  <p><%= f.submit "Submit" %></p>
+<% end %>

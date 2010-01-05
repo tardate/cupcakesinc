@@ -1,0 +1,16 @@
+<% title "Recipe" %>
+
+<p>
+  <strong>Name:</strong>
+  <%=h @recipe.name %>
+</p>
+<p>
+  <strong>Production Cost:</strong>
+  <%=h @recipe.production_cost %>
+</p>
+
+<p>
+  <%= link_to "Edit", edit_recipe_path(@recipe) %> |
+  <%= link_to "Destroy", @recipe, :confirm => 'Are you sure?', :method => :delete %> |
+  <%= link_to "View All", recipes_path %>
+</p>
