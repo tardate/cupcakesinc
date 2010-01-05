@@ -1,0 +1,10 @@
+
+
+
+== Creation STEP-BY-STEP
+
+$ rails awdemo-bizapp
+
+create mysql databases
+mysqladmin -uroot -p create bizapp_development
+mysqladmin -uroot -p create bizapp_test
