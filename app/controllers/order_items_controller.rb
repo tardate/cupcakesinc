@@ -1,6 +1,7 @@
 class OrderItemsController < ApplicationController
   def index
-    @order_items = OrderItem.all
+	@order = Order.find(params[:order_id])
+    @order_items = @order.order_items
   end
   
   def show

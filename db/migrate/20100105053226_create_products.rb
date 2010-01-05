@@ -4,7 +4,7 @@ class CreateProducts < ActiveRecord::Migration
       t.string :name
       t.string :description
       t.integer :recipe_id
-      t.decimal :unit_price
+      t.decimal :unit_price, :precision => 5, :scale => 2
       t.timestamps
     end
   end

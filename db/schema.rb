@@ -22,13 +22,14 @@ ActiveRecord::Schema.define(:version => 20100105053318) do
     t.integer  "order_id"
     t.integer  "product_id"
     t.integer  "qty"
-    t.integer  "unit_price", :limit => 10, :precision => 10, :scale => 0
+    t.decimal  "unit_price", :precision => 5, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "orders", :force => true do |t|
     t.integer  "customer_id"
+    t.datetime "order_date"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -37,7 +38,7 @@ ActiveRecord::Schema.define(:version => 20100105053318) do
     t.string   "name"
     t.string   "description"
     t.integer  "recipe_id"
-    t.integer  "unit_price",  :limit => 10, :precision => 10, :scale => 0
+    t.decimal  "unit_price",  :precision => 5, :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
   end

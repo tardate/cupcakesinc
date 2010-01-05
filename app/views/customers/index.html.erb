@@ -2,13 +2,13 @@
 
 <table>
   <tr>
+    <th>ID</th>
     <th>Name</th>
-    <th>Description</th>
   </tr>
   <% for customer in @customers %>
     <tr>
-      <td><%=h customer.name %></td>
-      <td><%=h customer.description %></td>
+      <td><%= customer.id %></td>
+      <td><%= customer.name %></td>
       <td><%= link_to "Show", customer %></td>
       <td><%= link_to "Edit", edit_customer_path(customer) %></td>
       <td><%= link_to "Destroy", customer, :confirm => 'Are you sure?', :method => :delete %></td>

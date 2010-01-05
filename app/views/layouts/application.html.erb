@@ -7,7 +7,22 @@
     <%= yield(:head) %>
   </head>
   <body>
+
     <div id="container">
+		<div id="header">
+		<table>
+		<tr><td>
+		<%= link_to image_tag("cupcake-logo.jpg"), root_path, :title => "Return to the home page" %>
+		</td><td>
+		<ol class="menu">
+		<li><%= link_to "Products", products_path %></li>
+		<li><%= link_to "Customers", customers_path %></li>
+		<li><%= link_to "Orders", orders_path %></li>
+		<li><%= link_to "Reporting", reports_path %></li>
+		</ol>
+		</td></tr>
+		</table>
+		</div>
       <%- flash.each do |name, msg| -%>
         <%= content_tag :div, msg, :id => "flash_#{name}" %>
       <%- end -%>

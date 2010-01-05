@@ -7,6 +7,7 @@ ETL::Engine.logger = Logger.new(STDOUT)
 source :in, {
   :file => 'source_data/products.csv',
   :skip_lines => 1,
+  :encoding => 'latin1',
   :parser => {
     :name => :delimited
   }
@@ -18,13 +19,18 @@ source :in, {
   :unit_price
 ]
 
-#before_write :surrogate_key, :target => :data_warehouse, :table => 'person_dimension', :column => 'id'
+before_write :check_exist, {
+  :target => :development, 
+  :table => 'products', 
+  :columns => [:name]
+}
 
 destination :out, {
   :type => :database,
   :target => :development,
   :database => 'bizapp_development',
-  :table => 'products'
+  :table => 'products',
+  :encoding => 'utf-8'
 },
 {
   :order => [:name, :description, :unit_price]

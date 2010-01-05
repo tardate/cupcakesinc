@@ -1,8 +1,10 @@
 ActionController::Routing::Routes.draw do |map|
 
-  map.resources :order_items
-
-  map.resources :orders
+  map.resources :reports
+  
+  map.resources :orders do |order|
+	order.resources :items, :controller => 'order_items'
+  end
 
   map.resources :products
 
