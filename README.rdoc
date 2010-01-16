@@ -1,67 +1,245 @@
+= ActiveWarehouse Demonstration App - Cupcakes Inc
+
+"Cupcakes Inc" is a sample set of Rails 2.x apps that test and demonstrate the ActiveWarehouse and ActiveWarehouse-ETL libraries for ruby/rails.
+
+ActiveWarehouse is a "classical" datawarehouse implementation for ruby & rails, originally produced by Anthony Eden.
+
+== About Cupcakes Inc
+
+Cupcakes Inc is a basic application framework for testing ActiveWarehouse/ETL. It comprises two rails applications:
+* Cupcakes Inc web store - represents our "transactional system" that contains the information about products, customers and sales.
+* Cupcakes Inc "dashboard" - is the Cupcakes Inc data warehouse built using ActiveWarehouse 
+
+Together, these demonstrate the following ActiveWarehouse/ETL features:
+* using ActiveWarehouse-ETL to load data from CSV files to a mysql database
+* using ActiveWarehouse-ETL to transform data from one mysql database to another
+* using standard ActiveWarehouse-ETL processes and transformations
+* using hierarchical date dimensions
+* using ActiveWarehouse::Report::TableReport to produce simple, drillable tabular reports
+* doing all of the above with the latest Rails release (2.3.5 at the time of writing)
 
 
-== Creation STEP-BY-STEP
+== References
 
-$ rails awdemo-bizapp
+* {ActiveWarehouse/ETL presentation (including Cupcakes Inc demo) - Singapore Ruby Brigade Jan-2010}[http://]
+* {Cupcakes Inc web store sample project repo}[http://github.com/tardate/cupcakesinc]
+* {Cupcakes Inc "dashboard" sample project repo}[http://github.com/tardate/cupcakesinc-dashboard]
+
+
+* {ActiveWarehouse repo}[http://github.com/aeden/activewarehouse]
+* {ActiveWarehouse doc wiki}[http://wiki.github.com/aeden/activewarehouse/documentation]
+* {ActiveWarehouse-ETL repo}[http://github.com/aeden/activewarehouse-etl]
+* {ActiveWarehouse-ETL doc wiki}[http://wiki.github.com/aeden/activewarehouse-etl/documentation]
+
+== How to use the Cupcakes Inc sample apps
+
+If you want to try Cupcakes on your own system, here are the basic steps you'll need to perform:
+
+* Install the ActiveWarehouse-ETL gem. ActiveWarehouse ETL depends on ActiveSupport, ActiveRecord, adapter_extensions and FasterCSV. If necessary you may have to approve the installation of these dependencies if they are not already installed.
+
+	$ gem install activewarehouse-etl
+	
+* Clone the github repositories
+
+	$ git://github.com/tardate/cupcakesinc.git
+	$ git://github.com/tardate/cupcakesinc-dashboard.git
+
+* Create/init the ETL processing database. Used internally by ActiveWarehouse-ETL
+
+	$ mysqladmin -uroot -p create etl_execution
+
+* Create/init the Cupcakes Inc "web store" database
+
+	$ mysqladmin -uroot -p create cupcake_development
+	$ mysqladmin -uroot -p create cupcake_test
+	$ cd cupcakesinc
+	# NB: you will need to review the config/database.yml file to ensure it has the correct connection details for your mysql server
+	$ rake db:migrate
+
+* Load the sample data for Cupcakes Inc "web store"
+
+	$ cd cupcakesinc
+	$ etl db/etl/load_products.ctl
+	$ etl db/etl/load_customers.ctl
+	$ etl db/etl/load_orders.ctl
+
+* Run/test the Cupcakes Inc "web store"
+
+	$ cd cupcakesinc
+	$ script/server -p 4000  # or any other port you choose
+	
+* Create/init the Cupcakes Inc "dashboard" database
+
+	$ mysqladmin -uroot -p create cupcake_dw_development
+	$ mysqladmin -uroot -p create cupcake_dw_test
+	$ cd cupcakesinc-dashboard
+	# NB: you will need to review the config/database.yml file to ensure it has the correct connection details for your mysql server
+	$ rake db:migrate
+	$ rake warehouse:migrate
+	$ rake warehouse:build_date_dimension START_DATE='01/01/2009'
+
+* Load the Cupcakes Inc "dashboard" from the "web store" using ActiveWarehouse-ETL
+
+	$ cd cupcakesinc-dashboard
+	$ etl db/etl/product_dimension.ctl
+	$ etl db/etl/customer_dimension.ctl
+	$ etl db/etl/sales_facts.ctl
+
+* Run/test the Cupcakes Inc "dashboard"
+
+	$ cd cupcakesinc-dashboard
+	$ script/server -p 4010  # or any other port you choose
+	
+
+
+	
+== Cupcakes Inc "web store" Creation STEP-BY-STEP
+
+Just some brief notes on all I did to create the Cupcakes Inc "web store" ...
+
+=== Create the project
+
+Create rails application
+
+	$ rails cupcakesinc
 
 === create mysql databases
-mysqladmin -uroot -p create cupcake_development
-mysqladmin -uroot -p create cupcake_test
 
+I am using mysql instead of the rails default sqlite mainly so I have a network-server instead of file-based database. 
+This simplifies cross-application database communication somewhat. Note that ActiveWarehouse itself should support any database supported by ActiveRecord.
 
-=== create basic structures
+	$ mysqladmin -uroot -p create cupcake_development
+	$ mysqladmin -uroot -p create cupcake_test
 
-ruby script/generate nifty_layout
+=== create basic app structure
 
-ruby script/generate nifty_scaffold customer name:string description:string
+Just some icing on the cupcake using Ryan Bates' nifty-generators NB: the nifty-generators gem does not need to be installed unless you want to run the generators again..
 
-ruby script/generate nifty_scaffold recipe name:string production_cost:decimal
-# recipe_ingredients - not considered for now, keep the model relatively simple
-ruby script/generate nifty_scaffold product name:string description:string recipe_id:integer unit_price:decimal
+	$ script/generate nifty_layout
 
-ruby script/generate nifty_scaffold order customer_id:integer order_date:datetime
-ruby script/generate nifty_scaffold order_item order_id:integer product_id:integer qty:integer unit_price:decimal
+	$ script/generate nifty_scaffold customer name:string description:string
 
-=== demo activewarehouse to load database from csv
+	$ script/generate nifty_scaffold recipe name:string production_cost:decimal
+	$ script/generate nifty_scaffold product name:string description:string recipe_id:integer unit_price:decimal
+	# NB: recipe (and recipe_ingredients) are not considered for now, keeping the model relatively simple. There's still a recipe model in the project, but it is not used
 
-$ gem install activewarehouse-etl
-
-ActiveWarehouse ETL depends on ActiveSupport, ActiveRecord, adapter_extensions and FasterCSV. If necessary you may have to approve the installation of these dependencies if they are not already installed.
-
-# create ETL execution database and add defintiion to config/database.yml
-$ mysqladmin -uroot -p create etl_execution
-
-path delimiters are not unified cross-systems. This will fail (silently):
-file: db\etl/source_data/products.csv
+	$ script/generate nifty_scaffold order customer_id:integer order_date:datetime
+	$ script/generate nifty_scaffold order_item order_id:integer product_id:integer qty:integer unit_price:decimal
 
 === native reports module
 
-ruby script/generate controller reports index
+Not used yet. Was intending to include standard Rails report implementations here for comparison to the ActiveWarehouse-based reports.
+ 
+	$ script/generate controller reports index
+
+=== demo loading database from csv using ActiveWarehouse-ETL
+
+Install the ETL gem:
+
+	$ gem install activewarehouse-etl
+
+ActiveWarehouse ETL depends on ActiveSupport, ActiveRecord, adapter_extensions and FasterCSV. If necessary you may have to approve the installation of these dependencies if they are not already installed.
+
+create ETL execution database and add defintiion to config/database.yml
+
+	$ mysqladmin -uroot -p create etl_execution
+
+=== ETL Processing
+
+Note: path delimiters in ETL scripts are not unified cross-systems. This will fail (silently):
+file: db\etl/source_data/products.csv
+Make sure that the ETL scripts refence CSV files using the correct delimiter for your platform. If running under mingw on windows, that means use '/'
+
+	$ etl db/etl/load_products.ctl
+	$ etl db/etl/load_customers.ctl
+	$ etl db/etl/load_orders.ctl
+
+The scripts above load the respective model tables from csv files in db/etl/source_data. The csv files were generated using Excel spreadsheets that can be found in the same directory.
 
 
 
-== ETL Processing
-
-$ etl db/etl/load_products.ctl
-
-$ etl db/etl/load_customers.ctl
-
-$ etl db/etl/load_orders.ctl
 
 
+== Cupcakes Inc "dashboard" Creation STEP-BY-STEP
+
+Just some brief notes on all I did to create the Cupcakes Inc "dashboard" ...
+
+=== Create the project
+
+Create rails application
+
+	$ rails cupcakesinc-dashboard
+
+Install ActiveWarehouse plugin (note: do not install as a gem - the lastest gem release is still an old rails 1.x version)
+
+	$ script/plugin install git://github.com/aeden/activewarehouse.git
+
+	
+=== create mysql databases
+
+I am using mysql instead of the rails default sqlite mainly so I have a network-server instead of file-based database. 
+This simplifies cross-application database communication somewhat. Note that ActiveWarehouse itself should support any database supported by ActiveRecord.
+
+	mysqladmin -uroot -p create cupcake_dw_development
+	mysqladmin -uroot -p create cupcake_dw_test
+
+== The dwh design
+
+Dimensions
+	* Date
+	* Customer
+	* Product
+
+Fact table
+	* Date ID (FK)
+	* Customer ID (FK)
+	* Product ID (FK)
+	* qty
+	* sale_price
+
+== generate fact and dimension models and migrations
+
+Using the ActiveWarehouse generators...
+
+	$ script/generate dimension date
+	$ script/generate dimension customer
+	$ script/generate dimension product
+	$ script/generate fact sales
+	$ rake db:migrate
+
+== Prep warehouse
+
+Build date dimension using the ActiveWarehouse helper task...
+
+	$ rake warehouse:migrate
+	$ rake warehouse:build_date_dimension START_DATE='01/01/2009'
+
+== ETL processing
+
+	$ etl db/etl/product_dimension.ctl
+	$ etl db/etl/customer_dimension.ctl
+	$ etl db/etl/sales_facts.ctl
 
 
+== build a cube
+
+Ensure dimension and Fact models correctly annotated
+
+	$ script/generate cube SalesByProduct
+	$ script/generate controller SalesByProductReports index
+	$ script/generate cube SalesByCustomer
+	$ script/generate controller SalesByCustomerReports index
 
 
+== UI
+
+Just some icing on the cupcake using Ryan Bates' nifty-generators NB: the nifty-generators gem does not need to be installed unless you want to run the generators again..
+
+	$ script/generate nifty_layout
 
 
-
-
-
-
-
-
-
+	
+	
 
 == Description of Contents
 
