@@ -6,10 +6,10 @@
     <th>Customer</th>
     <th>Order date</th>
   </tr>
-  <% for order in @orders %>
+  <% @orders.each do |order| %>
     <tr>
       <td><%= link_to order.id, order_items_path(order) %></td>
-      <td><%= link_to h(order.customer.name), customer_path(order.customer) %></td>
+      <td><%= link_to h(order.customer.name), customer_path( order.customer ) %></td>
       <td><%=h order.order_date %></td>
       <td><%= link_to "Show", order %></td>
       <td><%= link_to "Edit", edit_order_path(order) %></td>

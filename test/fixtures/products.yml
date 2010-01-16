@@ -1,10 +1,12 @@
 one:
+  id: 1
   name: MyString
   description: MyString
   recipe_id: 1
   unit_price: 9.99
 
 two:
+  id: 2
   name: MyString
   description: MyString
   recipe_id: 1

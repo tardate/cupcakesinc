@@ -10,7 +10,7 @@
   </tr>
   <% for order_item in @order_items %>
     <tr>
-      <td><%=h order_item.order_id %></td>
+      <td><%=h order_item.order.id %></td>
       <td><%=h order_item.id %></td>
       <td><%=h order_item.product.name %></td>
       <td><%=h order_item.qty %></td>

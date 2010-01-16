@@ -1,7 +1,9 @@
 one:
+  id: 1
   name: MyString
   description: MyString
 
 two:
+  id: 2
   name: MyString
   description: MyString
