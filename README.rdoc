@@ -21,7 +21,7 @@ Together, these demonstrate the following ActiveWarehouse/ETL features:
 
 == References
 
-* {ActiveWarehouse/ETL presentation (including Cupcakes Inc demo) - Singapore Ruby Brigade Jan-2010}[http://]
+* {ActiveWarehouse/ETL presentation (including Cupcakes Inc demo) - Singapore Ruby Brigade Jan-2010}[http://www.slideshare.net/tardate/activewarehouseetl-bi-dw-for-rubyrails]
 * {Cupcakes Inc web store sample project repo}[http://github.com/tardate/cupcakesinc]
 * {Cupcakes Inc "dashboard" sample project repo}[http://github.com/tardate/cupcakesinc-dashboard]
 
@@ -156,6 +156,7 @@ Make sure that the ETL scripts refence CSV files using the correct delimiter for
 
 The scripts above load the respective model tables from csv files in db/etl/source_data. The csv files were generated using Excel spreadsheets that can be found in the same directory.
 
+NB: there is also a script called "load_products_to_file.ctl" that demonstrates using ActiveWarehouse-ETL to transform from file-to-file. It is not pertinent for the sample application however.
 
 
 

@@ -5,7 +5,7 @@ ETL::Engine.logger = Logger.new(STDOUT)
 #ETL::Engine.logger.level = Logger::DEBUG
 
 source :in, {
-  :file => 'source_data/customers2.csv',
+  :file => 'source_data/customers.csv',
   :skip_lines => 1,
   :parser => {
     :name => :delimited

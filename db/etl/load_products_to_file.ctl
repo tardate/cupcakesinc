@@ -1,5 +1,5 @@
 
-#puts "executing load_products.ctl"
+#puts "executing load_products_to_file.ctl"
 
 ETL::Engine.logger = Logger.new(STDOUT)
 #ETL::Engine.logger.level = Logger::DEBUG
