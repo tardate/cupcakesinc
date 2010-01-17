@@ -41,8 +41,8 @@ If you want to try Cupcakes on your own system, here are the basic steps you'll 
 	
 * Clone the github repositories
 
-	$ git://github.com/tardate/cupcakesinc.git
-	$ git://github.com/tardate/cupcakesinc-dashboard.git
+	$ git clone git://github.com/tardate/cupcakesinc.git
+	$ git clone git://github.com/tardate/cupcakesinc-dashboard.git
 
 * Create/init the ETL processing database. Used internally by ActiveWarehouse-ETL
 
